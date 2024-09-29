@@ -31,12 +31,12 @@ function App() {
 
       // Set up event handler for receiving chat history
       connection.on("ReceiveHistory", (messageHistory) => {
-        console.log("Received chat history:", messageHistory);
+        console.log("Chat history:", messageHistory);
 
         // Update the messages state with chat history
         setMessages(messageHistory.map((msg) => ({
-          username: msg.Username,
-          msg: msg.Message
+          username: msg.username,
+          msg: msg.message
         })));
       });
 
@@ -44,11 +44,13 @@ function App() {
       await connection.start();
       console.log("Connection started");
 
-      // Invoke the "JoinSpecificChatRoom" method on the server
-      await connection.invoke("JoinSpecificChatRoom", { Username: username, ChatRoom: chatroom });
+
 
       // Fetch chat history for the room
-      await connection.invoke("FetchHistory", chatroom);
+      await connection.invoke('FetchHistory', chatroom);
+
+      // Invoke the "JoinSpecificChatRoom" method on the server
+      await connection.invoke("JoinSpecificChatRoom", { Username: username, ChatRoom: chatroom });
 
       // Store the connection in state
       setConnection(connection);

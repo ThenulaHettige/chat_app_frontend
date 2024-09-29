@@ -3,7 +3,6 @@ import MessageContainer from './MessageContainer';
 import SendMessageForm from "./SendMessageForm";
 
 const ChatRoom = ({messages,sendMessage}) => {
-    console.log("chatroom" , messages);
     return (
     <div>
         <Row className="px-5 py-5">
