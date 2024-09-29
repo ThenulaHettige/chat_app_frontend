@@ -1,5 +1,5 @@
-import { Container, Row, Col } from 'react-bootstrap'; 
-import { useState } from 'react'; 
+import { Container, Row, Col } from 'react-bootstrap';
+import { useState } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import WaitingRoom from './components/waitingroom';
@@ -9,6 +9,7 @@ import ChatRoom from './components/ChatRoom';
 function App() {
   const [conn, setConnection] = useState(null); // Initialize with null
   const [messages, setMessages] = useState([]); // Initialize with an empty array
+  const [chatroom, setChatroom] = useState(''); // Add chatroom state
 
   const joinChatRoom = async (username, chatroom) => {
     try {
@@ -21,15 +22,22 @@ function App() {
       connection.on("ReceiveMessage", (username, message) => {
         console.log(`Received message from ${username}: ${message}`);
 
-        //
         // Update the messages state when a new message is received
-       // setMessages((prevMessages) => [...prevMessages, { username, msg: message }]);
-
-       setMessages((prevMessages) => {
-        console.log('Previous messages:', prevMessages);
-        return [...prevMessages, { username, msg: message }];
+        setMessages((prevMessages) => {
+          console.log('Previous messages:', prevMessages);
+          return [...prevMessages, { username, msg: message }];
+        });
       });
 
+      // Set up event handler for receiving chat history
+      connection.on("ReceiveHistory", (messageHistory) => {
+        console.log("Received chat history:", messageHistory);
+
+        // Update the messages state with chat history
+        setMessages(messageHistory.map((msg) => ({
+          username: msg.Username,
+          msg: msg.Message
+        })));
       });
 
       // Start the connection
@@ -39,21 +47,27 @@ function App() {
       // Invoke the "JoinSpecificChatRoom" method on the server
       await connection.invoke("JoinSpecificChatRoom", { Username: username, ChatRoom: chatroom });
 
+      // Fetch chat history for the room
+      await connection.invoke("FetchHistory", chatroom);
+
       // Store the connection in state
       setConnection(connection);
+
+      // Store the chatroom in state
+      setChatroom(chatroom);
 
     } catch (error) {
       console.error("Error while connecting to SignalR", error);
     }
   };
 
-  const sendMessage = async(message) => {
+  const sendMessage = async (message) => {
     try {
-      await conn.invoke("SendMessage",message);
+      await conn.invoke("SendMessage", message);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div>
@@ -66,9 +80,9 @@ function App() {
               </h1>
             </Col>
           </Row>
-          {!conn 
-          ? <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
-          : <ChatRoom messages={messages} sendMessage={sendMessage}></ChatRoom>
+          {!conn
+            ? <WaitingRoom joinChatRoom={joinChatRoom}></WaitingRoom>
+            : <ChatRoom messages={messages} sendMessage={sendMessage}></ChatRoom>
           }
         </Container>
       </main>
