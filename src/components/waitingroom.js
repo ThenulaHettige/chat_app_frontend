@@ -1,32 +1,30 @@
 import { useState } from "react";
-import { Container, Row, Col, Form, FormControl } from 'react-bootstrap';
+import { Row, Col, Form, FormControl } from 'react-bootstrap';
 
-const WaitingRoom = ({ joinChatRoom }) => {
+const WaitingRoom = ({ fetchChatRooms }) => {
+  const [username, setUsername] = useState('');
 
-    const[username, setUsername] = useState();
-    const[chatroom, setChatroom] = useState();
-
-    return <Form onSubmit={ e => {
-        e.preventDefault();
-        joinChatRoom(username,chatroom);
+  return (
+    <Form onSubmit={e => {
+      e.preventDefault();
+      fetchChatRooms(username);
     }}>
-
-        <Row className="px-5 py-5">
-            <Col sm={12}>
-                <Form.Group>
-                    <FormControl placeholder="Username"
-                    onChange={e => setUsername(e.target.value)}></FormControl>
-                    <FormControl placeholder="Chatroom"
-                    onChange={e => setChatroom(e.target.value)}></FormControl>
-                </Form.Group>
-            </Col>
-            <Col sm={12}>
-                <hr />
-                <button variant="success" type='submit'>Join</button>
-            </Col>
-        </Row>
-
+      <Row className="px-5 py-5">
+        <Col sm={12}>
+          <Form.Group>
+            <FormControl
+              placeholder="Enter your username"
+              onChange={e => setUsername(e.target.value)}
+            />
+          </Form.Group>
+        </Col>
+        <Col sm={12}>
+          <hr />
+          <button variant="success" type="submit">Login</button>
+        </Col>
+      </Row>
     </Form>
-}
+  );
+};
 
-export default WaitingRoom
+export default WaitingRoom;
