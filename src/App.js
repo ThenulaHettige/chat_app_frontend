@@ -65,6 +65,29 @@ function App() {
     }
   };
 
+  const signupUser = async (payload) => {
+    try {
+      const connection = new HubConnectionBuilder()
+        .withUrl("http://localhost:5116/chat")
+        .configureLogging(LogLevel.Information)
+        .build();
+  
+      await connection.start();
+  
+      // Invoke the signupUser method on the backend, passing the payload
+      await connection.invoke('SignUpUser', payload);
+  
+      console.log("User registration successful");
+      // Optionally, handle what happens after successful signup, such as navigating the user to the chat page.
+      
+      // Cleanup or save connection as needed
+      setConnection(connection);
+    } catch (error) {
+      console.error("Error during user signup", error);
+    }
+  };
+
+  
   const sendMessage = async (message) => {
     try {
       await conn.invoke("SendMessage", message);
@@ -95,7 +118,7 @@ function App() {
         <Container fluid>
           <Row className='my-5'>
             <Col sm={3} className="left-chat-panel">
-              {!conn && <WaitingRoom fetchChatRooms={fetchChatRooms} />}
+              {!conn && <WaitingRoom fetchChatRooms={fetchChatRooms} signUpUser={signupUser} />}
               {conn && (
                 <>
                   {/* Display logged-in username */}

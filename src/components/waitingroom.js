@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Form, FormControl, Button, Row, Col } from 'react-bootstrap';
 
-const WaitingRoom = ({ fetchChatRooms }) => {
+const WaitingRoom = ({ fetchChatRooms, signUpUser }) => {
   const [isSignup, setIsSignup] = useState(false); // state to toggle login/signup
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -16,7 +16,9 @@ const WaitingRoom = ({ fetchChatRooms }) => {
 
   const handleSignupSubmit = (e) => {
     e.preventDefault();
-    console.log('Signing up with:', { username, firstName, lastName, email });
+    const payoad =  { username, firstName, lastName, email };
+    console.log('Signing up with:',);
+    signUpUser(payoad);
   };
 
   return (
