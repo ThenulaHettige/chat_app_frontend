@@ -82,6 +82,8 @@ function App() {
       
       // Cleanup or save connection as needed
       setConnection(connection);
+
+      fetchChatRooms(payload.username)
     } catch (error) {
       console.error("Error during user signup", error);
     }
