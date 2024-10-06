@@ -2,7 +2,7 @@ import { Container, Row, Col, Form, FormControl } from 'react-bootstrap'; // Add
 import { useState, useEffect } from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import WaitingRoom from './components/waitingroom';
+import WaitingRoom from './components/Waitingroom';
 import ChatRoom from './components/ChatRoom';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
