@@ -1,3 +1,19 @@
+## Install SignalR for your React app
+
+npm install @microsoft/signalr
+
+## Install React Bootstrap in your React app
+
+npm install react-bootstrap bootstrap
+
+## Install dependencies
+
+npm start
+
+## Start the development server
+
+npm start
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
